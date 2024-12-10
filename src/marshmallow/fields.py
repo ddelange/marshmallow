@@ -1436,44 +1436,46 @@ class Date(DateTime):
 
 class TimeDelta(Field):
     """A field that (de)serializes a :class:`datetime.timedelta` object to an
-    integer or float and vice versa. The integer or float can represent the
-    number of days, seconds or microseconds.
+    integer or float. The integer or float can represent any time unit that the
+    :class:`datetime.timedelta` constructor supports.
 
-    :param precision: Influences how the integer or float is interpreted during
-        (de)serialization. Must be 'days', 'seconds', 'microseconds',
-        'milliseconds', 'minutes', 'hours' or 'weeks'.
-    :param serialization_type: Whether to (de)serialize to a `int` or `float`.
+    :param precision: The time unit used for (de)serialization. Must be one of 'weeks',
+        'days', 'hours', 'minutes', 'seconds', 'milliseconds' or 'microseconds'.
+    :param serialization_type: Whether to serialize to an `int` or `float`.
+        Ignored during deserialization: both `int` and `float` inputs are supported.
     :param kwargs: The same keyword arguments that :class:`Field` receives.
 
     Integer Caveats
     ---------------
-    Any fractional parts (which depends on the precision used) will be truncated
-    when serializing using `int`.
+    When serializing using ``serialization_type=int`` and depending on the ``precision``
+    used, any fractional parts might be truncated (downcast to integer).
 
     Float Caveats
     -------------
-    Use of `float` when (de)serializing may result in data precision loss due
-    to the way machines handle floating point values.
+    Precision loss may occur when serializing a highly precise :class:`datetime.timedelta`
+    object using ``serialization_type=float`` and a big ``precision`` unit due to floating
+    point arithmetics.
 
-    Regardless of the precision chosen, the fractional part when using `float`
-    will always be truncated to microseconds.
-    For example, `1.12345` interpreted as microseconds will result in `timedelta(microseconds=1)`.
+    When necessary, the :class:`datetime.timedelta` constructor rounds `float` inputs
+    to whole microseconds during initialization of the object. As a result, deserializing
+    a `float` might be subject to rounding, regardless of `precision`. For example,
+    ``TimeDelta().deserialize("1.1234567") == timedelta(seconds=1, microseconds=123457)``.
 
     .. versionchanged:: 2.0.0
         Always serializes to an integer value to avoid rounding errors.
         Add `precision` parameter.
     .. versionchanged:: 3.17.0
-        Allow (de)serialization to `float` through use of a new `serialization_type` parameter.
-        `int` is the default to retain previous behaviour.
+        Allow serialization to `float` through use of a new `serialization_type` parameter.
+        Defaults to `int` for backwards compatibility.
     """
 
-    DAYS = "days"
-    SECONDS = "seconds"
-    MICROSECONDS = "microseconds"
-    MILLISECONDS = "milliseconds"
-    MINUTES = "minutes"
-    HOURS = "hours"
     WEEKS = "weeks"
+    DAYS = "days"
+    HOURS = "hours"
+    MINUTES = "minutes"
+    SECONDS = "seconds"
+    MILLISECONDS = "milliseconds"
+    MICROSECONDS = "microseconds"
 
     #: Default error messages.
     default_error_messages = {
