@@ -1526,7 +1526,7 @@ class TimeDelta(Field):
 
     def _deserialize(self, value, attr, data, **kwargs):
         try:
-            value = self.serialization_type(value)
+            value = float(value)
         except (TypeError, ValueError) as error:
             raise self.make_error("invalid") from error
 
