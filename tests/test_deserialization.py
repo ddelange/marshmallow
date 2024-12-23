@@ -698,7 +698,7 @@ class TestFieldDeserialization:
         assert field.deserialize(value) == expected
 
     def test_invalid_timedelta_precision(self):
-        with pytest.raises(ValueError, match='The precision must be "days",'):
+        with pytest.raises(ValueError, match="The precision must be one of: weeks,"):
             fields.TimeDelta("invalid")
 
     def test_timedelta_field_deserialization(self):
