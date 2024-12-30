@@ -1460,7 +1460,8 @@ class TimeDelta(Field):
         Allow serialization to `float` through use of a new `serialization_type` parameter.
         Defaults to `int` for backwards compatibility. Also affects deserialization.
     .. versionchanged:: 4.0.0
-        Deprecate `serialization_type` parameter, always serialize to float.
+        Remove `serialization_type` parameter and always serialize to float.
+        Value is cast to a `float` upon deserialization.
     """
 
     WEEKS = "weeks"
