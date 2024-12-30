@@ -27,6 +27,16 @@ Changelog
 
 Thanks :user:`ddelange` for the PR.
 
+3.23.2 (2024-12-18)
+*******************
+
+Bug fixes:
+
+- Improve type hint formatting for ``Field``, ``Nested``, and ``Function`` fields
+  to resolve PyCharm warnings (:issue:`2268`).
+  Thanks :user:`Fares-Abubaker` for reporting and fixing.
+
+
 3.23.1 (2024-11-01)
 *******************
 
