@@ -1491,7 +1491,6 @@ class TimeDelta(Field):
     def __init__(
         self,
         precision: str = SECONDS,
-        serialization_type: typing.Any = missing_,
         **kwargs,
     ) -> None:
         precision = precision.lower()
@@ -1500,13 +1499,6 @@ class TimeDelta(Field):
             units = ", ".join(self._unit_to_microseconds_mapping)
             msg = f"The precision must be one of: {units}."
             raise ValueError(msg)
-
-        if serialization_type is not missing_:
-            warnings.warn(
-                "The 'serialization_type' argument to TimeDelta is deprecated.",
-                RemovedInMarshmallow4Warning,
-                stacklevel=2,
-            )
 
         self.precision = precision
         super().__init__(**kwargs)
