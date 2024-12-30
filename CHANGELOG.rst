@@ -10,6 +10,7 @@ Changelog
 .. code-block:: python
 
     from marshmallow import fields
+
     field = fields.TimeDelta()
 
     # Before
