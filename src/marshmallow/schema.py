@@ -28,7 +28,7 @@ from marshmallow.decorators import (
     VALIDATES_SCHEMA,
 )
 from marshmallow.error_store import ErrorStore
-from marshmallow.exceptions import StringNotCollectionError, ValidationError
+from marshmallow.exceptions import SCHEMA, StringNotCollectionError, ValidationError
 from marshmallow.orderedset import OrderedSet
 from marshmallow.utils import get_value, is_collection, set_value
 
@@ -765,16 +765,16 @@ class Schema(metaclass=SchemaMeta):
 
     def _run_validator(
         self,
-        validator_func,
+        validator_func: types.SchemaValidator,
         output,
         *,
         original_data,
-        error_store,
-        many,
-        partial,
-        unknown,
-        pass_original,
-        index=None,
+        error_store: ErrorStore,
+        many: bool,
+        partial: bool | types.StrSequenceOrSet | None,
+        unknown: types.UnknownOption | None,
+        pass_original: bool,
+        index: int | None = None,
     ):
         try:
             if pass_original:  # Pass original, raw data (before unmarshalling)
@@ -784,7 +784,26 @@ class Schema(metaclass=SchemaMeta):
             else:
                 validator_func(output, partial=partial, many=many, unknown=unknown)
         except ValidationError as err:
-            error_store.store_error(err.messages, err.field_name, index=index)
+            field_name = err.field_name
+            data_key: str
+            if field_name == SCHEMA:
+                data_key = SCHEMA
+            else:
+                field_obj: Field | None = None
+                try:
+                    field_obj = self.fields[field_name]
+                except KeyError:
+                    if field_name in self.declared_fields:
+                        field_obj = self.declared_fields[field_name]
+                if field_obj:
+                    data_key = (
+                        field_obj.data_key
+                        if field_obj.data_key is not None
+                        else field_name
+                    )
+                else:
+                    data_key = field_name
+            error_store.store_error(err.messages, data_key, index=index)
 
     def validate(
         self,
