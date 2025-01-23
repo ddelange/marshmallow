@@ -121,7 +121,7 @@ Previously-deprecated APIs have been removed, including:
 - ``Field.fail``, which was replaced by ``Field.make_error`` in 3.0.0.
 - `json_module` class Meta option (deprecated in 3.0.0b3). Use `render_module` instead.
 
-3.26.0 (unreleased)
+3.26.0 (2025-01-22)
 *******************
 
 Features:
@@ -137,6 +137,8 @@ Bug fixes:
 - Correctly handle multiple `@post_load <marshmallow.post_load>` methods where one method appends to
   the data and another passes ``pass_original=True`` (:issue:`1755`).
   Thanks :user:`ghostwheel42` for reporting.
+- ``URL`` fields now properly validate ``file`` paths (:issue:`2249`).
+  Thanks :user:`0xDEC0DE` for reporting and fixing.
 
 Documentation:
 
