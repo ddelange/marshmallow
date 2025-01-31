@@ -121,6 +121,15 @@ Previously-deprecated APIs have been removed, including:
 - ``Field.fail``, which was replaced by ``Field.make_error`` in 3.0.0.
 - `json_module` class Meta option (deprecated in 3.0.0b3). Use `render_module` instead.
 
+(unreleased)
+************
+
+Other changes:
+
+- Remove default value for the ``data`` param of `Nested._deserialize <marshmallow.fields.Nested._deserialize>` (:issue:`2802`).
+  Thanks :user:`gbenson` for reporting.
+
+
 3.26.0 (2025-01-22)
 *******************
 
