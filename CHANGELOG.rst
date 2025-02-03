@@ -124,8 +124,13 @@ Previously-deprecated APIs have been removed, including:
 - ``Field.fail``, which was replaced by ``Field.make_error`` in 3.0.0.
 - `json_module` class Meta option (deprecated in 3.0.0b3). Use `render_module` instead.
 
-(unreleased)
-************
+3.26.1 (2025-02-03)
+*******************
+
+Bug fixes:
+
+- Typing: Fix type annotations for `class Meta <marshmallow.Schema.Meta>` options (:issue:`2804`).
+  Thanks :user:`lawrence-law` for reporting.
 
 Other changes:
 
